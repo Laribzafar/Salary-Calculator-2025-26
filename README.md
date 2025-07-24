@@ -1,1 +1,189 @@
 # Salary-Calculator-2025-26
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Awan Sports Industries Pvt Ltd. Unit#2 - Salary Deduction Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef3f7;
+            color: #333;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-height: 80px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #555;
+            font-weight: normal;
+            margin: 0 0 30px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #1976d2;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0d47a1;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e3f2fd;
+            border-left: 6px solid #1976d2;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: #0d47a1;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="card">
+        <!-- ✅ Company Logo Section -->
+        <div class="logo">
+            <img src="awan-logo.png" alt="Awan Sports Logo">
+            <!-- Replace 'awan-logo.png' with your actual file name or image URL -->
+        </div>
+
+        <h1>Salary Deduction Calculator</h1>
+        <h2>Prepared By: Larib Zafar<br>HR Manager, Awan Sports Industries Pvt Ltd. Unit#2</h2>
+
+        <label for="monthlySalary">Enter Gross Monthly Salary (PKR):</label>
+        <input type="number" id="monthlySalary" placeholder="e.g. 150000">
+        <button onclick="calculateDeductions()">Calculate</button>
+
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+    function calculateDeductions() {
+        const monthlySalary = parseFloat(document.getElementById("monthlySalary").value);
+        if (isNaN(monthlySalary) || monthlySalary <= 0) {
+            document.getElementById("result").innerHTML = "❌ Please enter a valid monthly salary.";
+            return;
+        }
+
+        const pfDeduction = monthlySalary * 0.0833;
+        const eobiDeduction = 400;
+        const salaryAfterPfEobi = monthlySalary - pfDeduction - eobiDeduction;
+        const annualTaxableIncome = salaryAfterPfEobi * 12;
+
+        let annualTax = 0;
+        if (annualTaxableIncome <= 600000) {
+            annualTax = 0;
+        } else if (annualTaxableIncome <= 1200000) {
+            annualTax = (annualTaxableIncome - 600000) * 0.01;
+        } else if (annualTaxableIncome <= 2200000) {
+            annualTax = 6000 + (annualTaxableIncome - 1200000) * 0.11;
+        } else if (annualTaxableIncome <= 3200000) {
+            annualTax = 116000 + (annualTaxableIncome - 2200000) * 0.23;
+        } else if (annualTaxableIncome <= 4100000) {
+            annualTax = 346000 + (annualTaxableIncome - 3200000) * 0.30;
+        } else {
+            annualTax = 616000 + (annualTaxableIncome - 4100000) * 0.35;
+        }
+
+        const monthlyTax = annualTax / 12;
+        const totalDeductions = pfDeduction + eobiDeduction + monthlyTax;
+        const netSalary = monthlySalary - totalDeductions;
+
+        document.getElementById("result").innerHTML = `
+            <strong>Gross Monthly Salary:</strong> Rs. ${monthlySalary.toLocaleString()}<br>
+            <strong>PF Deduction (8.33%):</strong> Rs. ${pfDeduction.toFixed(2)}<br>
+            <strong>EOBI Deduction:</strong> Rs. 400.00<br>
+            <strong>Salary After PF & EOBI:</strong> Rs. ${salaryAfterPfEobi.toFixed(2)}<br>
+            <strong>Annual Taxable Income:</strong> Rs. ${annualTaxableIncome.toLocaleString()}<br>
+            <strong>Monthly Tax:</strong> Rs. ${monthlyTax.toFixed(2)}<br>
+            <strong>Total Monthly Deductions:</strong> Rs. ${totalDeductions.toFixed(2)}<br>
+            <strong>Net Monthly Salary:</strong> Rs. ${netSalary.toFixed(2)}
+        `;
+    }
+</script>
+
+</body>
+</html>
